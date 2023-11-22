@@ -15,7 +15,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const data = await getSnippets();
-        setSnippets(data || []); // Provide an empty array as a default value
+        setSnippets(data || []);
       } catch (error) {
         console.error('Failed to fetch snippets:', error);
       }
@@ -27,11 +27,16 @@ export default function Home() {
   const handleAddSnippet = async (title: string, snippet: string) => {
     try {
       const response = await addSnippet(title, snippet);
-      setSnippets([response, ...snippets]);
+      if (response) {
+        setSnippets([response, ...snippets]);
+      } else {
+        return null;
+      }
     } catch (error) {
       console.error("Failed to add snippet:", error);
     }
   };
+  
   
 
 

@@ -1,7 +1,7 @@
 import { useEffect, useState, SetStateAction, Dispatch } from 'react';
 import { getSnippets } from '@/lib/snippets';
 
-type Snippet = Record<string, any>;
+type Snippet = Record<string, any>; // Adjust the type according to your snippet structure
 
 export function useSnippets() {
   const [snippets, setSnippets] = useState<Record<string, any>[]>([]);
@@ -9,7 +9,8 @@ export function useSnippets() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getSnippets();
+        const data = await getSnippets()!;
+        // Add the non-null assertion here
         setSnippets(data);
       } catch (error) {
         console.error('Failed to fetch snippets:', error);
