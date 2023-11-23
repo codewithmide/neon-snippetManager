@@ -2,7 +2,7 @@
 
 import { UserButton } from "@clerk/nextjs";
 import { useEffect } from "react";
-import { getSnippets, addSnippet } from "@/lib/snippets";
+import { getSnippets, addSnippet, deleteSnippet } from "@/lib/snippets";
 import SnippetForm from "@/components/SnippetForm";
 import SnippetList from "@/components/SnippetList";
 import { IoStar } from 'react-icons/io5';
@@ -11,6 +11,7 @@ import { useSnippets } from "@/hooks/useSnippets";
 export default function Home() {
   const { snippets, setSnippets } = useSnippets();
 
+  // Function to fetch snippets
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,6 +25,7 @@ export default function Home() {
     fetchData();
   }, [setSnippets]);
 
+  // Function to add a snippet
   const handleAddSnippet = async (title: string, snippet: string) => {
     try {
       const response = await addSnippet(title, snippet);
@@ -36,17 +38,23 @@ export default function Home() {
       console.error("Failed to add snippet:", error);
     }
   };
-  
-  
 
+  // Function to delete a snippet
+  const handleDeleteSnippet = async (id: number) => {
+    try {
+      await deleteSnippet(id);
+      // Remove the snippet from the local state
+      setSnippets(snippets.filter(snippet => snippet.id !== id));
+    } catch (error) {
+      console.error("Failed to delete snippet:", error);
+    }
+  };
 
   return (
     <div className="w-full min-h-screen font-bold font-sansSerif bg-black overflow-x-hidden flex-col flex items-center gap-16">
       {/* Header */}
       <nav className="w-11/12 border-white border-b py-6 flex items-center justify-between">
-        <div>
-          <div className="tracking-wide">SnippetHive</div>
-        </div>
+        <div className="tracking-wide text-xl font-semibold">SnippetHive</div>
         <div className="flex items-center gap-3">
           <span className="font-bold">
             <a
@@ -79,7 +87,7 @@ export default function Home() {
           <h1 className="text-2xl">
             My snippet(s)
           </h1>
-          <SnippetList snippets={snippets} />
+          <SnippetList onDelete={handleDeleteSnippet} snippets={snippets} />
         </div>
       </main>
       {/* Body Ends */}

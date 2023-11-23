@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 
 const SnippetForm = ({ onAddSnippet }: { onAddSnippet: any }) => {
@@ -8,13 +10,12 @@ const SnippetForm = ({ onAddSnippet }: { onAddSnippet: any }) => {
     e.preventDefault();
 
     if (!title || !snippet) {
-      // Handle validation error
+      alert("Title and snippet are required!");
       return;
     }
 
     try {
       await onAddSnippet(title, snippet);
-      // Clear form after successful submission
       setTitle('');
       setsnippet('');
     } catch (error) {

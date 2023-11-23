@@ -1,7 +1,7 @@
 import { useEffect, useState, SetStateAction, Dispatch } from 'react';
 import { getSnippets } from '@/lib/snippets';
 
-type Snippet = Record<string, any>; // Adjust the type according to your snippet structure
+type Snippet = Record<string, any>;
 
 export function useSnippets() {
   const [snippets, setSnippets] = useState<Record<string, any>[]>([]);

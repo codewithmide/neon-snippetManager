@@ -34,3 +34,22 @@ export async function addSnippet(title: string, snippet: string) {
   const response = await sql`INSERT INTO snippets (title, snippet) VALUES (${title}, ${snippet}) RETURNING *`;
   return response;
 }
+
+// An async function to delete a snippet
+export async function deleteSnippet(id: number) {
+  const databaseUrl = "postgresql://codewithmide:9QPrwx3bsYnh@ep-solitary-tooth-79977739.us-east-2.aws.neon.tech/neondb";
+
+  if (!databaseUrl) {
+    console.error("DATABASE_URL is not defined.");
+    return;
+  }
+
+  const sql = neon(databaseUrl);
+
+  try {
+    const response = await sql`DELETE FROM snippets WHERE id = ${id}`;
+    return response;
+  } catch (error) {
+    console.error("Error deleting snippet:", error);
+  }
+}
