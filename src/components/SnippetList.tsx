@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// ... existing imports ...
 
 const SnippetList = ({ snippets, onDelete }: { snippets: any, onDelete: (id: number) => void }) => {
   // Function to copy the snippet to the clipboard

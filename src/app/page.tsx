@@ -74,7 +74,7 @@ export default function Home() {
       {/* Header Ends */}
 
       {/* Body */}
-      <main className="flex items-center justify-between w-11/12">
+      <main className="flex justify-between w-11/12">
         <div className="w-1/2 border-r border-white flex-col flex gap-6 pr-6">
           <h1 className="text-2xl">
             Save a code snippet
