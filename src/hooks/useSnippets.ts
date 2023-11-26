@@ -6,6 +6,7 @@ type Snippet = Record<string, any>;
 export function useSnippets() {
   const [snippets, setSnippets] = useState<Record<string, any>[]>([]);
 
+
   // Explicitly type the setSnippets function
   const setSnippetsState: Dispatch<SetStateAction<Record<string, any>[]>> = setSnippets;
 

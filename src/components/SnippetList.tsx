@@ -21,7 +21,7 @@ const SnippetList = ({ snippets, onDelete }: { snippets: any, onDelete: (id: num
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {snippets.map((snippet: any) => (
         <div key={snippet.id} className="bg-white text-black p-4 rounded shadow-md">
           <p className="font-bold mb-2">{snippet.title}</p>
