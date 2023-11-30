@@ -10,18 +10,18 @@ import { useSnippets } from "@/hooks/useSnippets";
 
 export default function Home() {
   const { snippets, setSnippets } = useSnippets();
-
+  
   // Function to fetch snippets
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getSnippets();
-        setSnippets(data || []);
-      } catch (error) {
-        console.error('Failed to fetch snippets:', error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const data = await getSnippets();
+      setSnippets(data || []);
+    } catch (error) {
+      console.error('Failed to fetch snippets:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [setSnippets]);
 
@@ -30,7 +30,9 @@ export default function Home() {
     try {
       const response = await addSnippet(title, snippet);
       if (response) {
+        fetchData();
         setSnippets([response, ...snippets]);
+        
       } else {
         return null;
       }
