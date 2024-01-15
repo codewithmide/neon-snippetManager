@@ -3,8 +3,8 @@
 import { UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { getSnippets, addSnippet, deleteSnippet } from "@/lib/snippets";
-import SnippetForm from "@/components/snippetForm";
-import SnippetList from "@/components/snippetList";
+import SnippetForm from "../components/SnippetForm";
+import SnippetList from "../components/SnippetList";
 import { useSnippets } from "@/hooks/useSnippets";
 import { useUser } from "@clerk/nextjs";
 
