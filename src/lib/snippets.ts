@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = "postgresql://codewithmide:9QPrwx3bsYnh@ep-solitary-tooth-79977739.us-east-2.aws.neon.tech/neondb";
 
 export const getSnippets = async (user_id: string | null) => {
     if (!databaseUrl) {
