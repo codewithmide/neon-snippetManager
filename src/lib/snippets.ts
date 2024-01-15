@@ -1,55 +1,43 @@
 import { neon } from '@neondatabase/serverless';
 
-// An async function to get snippets
-export async function getSnippets() {
-  const databaseUrl = "postgresql://codewithmide:9QPrwx3bsYnh@ep-solitary-tooth-79977739.us-east-2.aws.neon.tech/neondb";
+const databaseUrl = process.env.DATABASE_URL;
 
-  if (!databaseUrl) {
-    console.error("DATABASE_URL is not defined.");
-    return [];
-  }
+export const getSnippets = async (user_id: string | null) => {
+    if (!databaseUrl) {
+      console.error("DATABASE_URL is not defined.");
+      return [];
+    }
+  
+    const sql = neon(databaseUrl);
+    try {
+        const response = await sql`SELECT * FROM snippets WHERE user_id = ${user_id || ''} ORDER BY id DESC`;
+        return response;
+    } catch (error) {
+        console.error("Error fetching snippets:", error);
+        return [];
+    }
+};
 
-  const sql = neon(databaseUrl);
-
-  try {
-    const response = await sql`SELECT * FROM snippets ORDER BY id DESC`;
-    return response;
-  } catch (error) {
-    console.error("Error fetching snippets:", error);
-    return [];
-  }
-}
-
-// An async function to add snippets
-export async function addSnippet(title: string, snippet: string) {
-  const databaseUrl = "postgresql://codewithmide:9QPrwx3bsYnh@ep-solitary-tooth-79977739.us-east-2.aws.neon.tech/neondb";
-
+export const addSnippet = async (title: string, snippet: string, user_id: string) => {
   if (!databaseUrl) {
     console.error("DATABASE_URL is not defined.");
     return null;
   }
-
   const sql = neon(databaseUrl);
-
-  const response = await sql`INSERT INTO snippets (title, snippet) VALUES (${title}, ${snippet}) RETURNING *`;
+  const response = await sql`INSERT INTO snippets (title, snippet, user_id) VALUES (${title}, ${snippet}, ${user_id}) RETURNING *`;
   return response;
-}
+};
 
-// An async function to delete a snippet
-export async function deleteSnippet(id: number) {
-  const databaseUrl = "postgresql://codewithmide:9QPrwx3bsYnh@ep-solitary-tooth-79977739.us-east-2.aws.neon.tech/neondb";
-
+export const deleteSnippet = async (id: number) => {
   if (!databaseUrl) {
     console.error("DATABASE_URL is not defined.");
     return;
   }
-
   const sql = neon(databaseUrl);
-
   try {
     const response = await sql`DELETE FROM snippets WHERE id = ${id}`;
     return response;
   } catch (error) {
     console.error("Error deleting snippet:", error);
   }
-}
+};

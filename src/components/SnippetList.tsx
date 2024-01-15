@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-
 const SnippetList = ({ snippets, onDelete }: { snippets: any, onDelete: (id: number) => void }) => {
+
   // Function to copy the snippet to the clipboard
   const copyToClipboard = (snippet: string) => {
     navigator.clipboard.writeText(snippet).then(() => {
@@ -22,8 +22,8 @@ const SnippetList = ({ snippets, onDelete }: { snippets: any, onDelete: (id: num
 
   return (
     <div className="space-y-4 w-full">
-      {snippets.map((snippet: any) => (
-        <div key={snippet.id} className="bg-white text-black p-4 rounded shadow-md">
+      {snippets.map((snippet: any, id: number) => (
+        <div key={id} className="bg-white text-black p-4 rounded shadow-md w-full">
           <p className="font-bold mb-2">{snippet.title}</p>
           <pre className="whitespace-pre-wrap text-sm bg-black text-white rounded p-3 mb-2">
             {snippet.snippet}
@@ -47,6 +47,4 @@ const SnippetList = ({ snippets, onDelete }: { snippets: any, onDelete: (id: num
     </div>
   );
 };
-
 export default SnippetList;
-

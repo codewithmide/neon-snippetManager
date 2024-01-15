@@ -1,20 +1,21 @@
 "use client"
 
 import { UserButton } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getSnippets, addSnippet, deleteSnippet } from "@/lib/snippets";
-import SnippetForm from "@/components/SnippetForm";
-import SnippetList from "@/components/SnippetList";
-import { IoStar } from 'react-icons/io5';
+import SnippetForm from "@/components/snippetForm";
+import SnippetList from "@/components/snippetList";
 import { useSnippets } from "@/hooks/useSnippets";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
+  const user = useUser();
   const { snippets, setSnippets } = useSnippets();
-  
-  // Function to fetch snippets
+
   const fetchData = async () => {
     try {
-      const data = await getSnippets();
+      const user_id = user?.user?.id || null;
+      const data = await getSnippets(user_id);
       setSnippets(data || []);
     } catch (error) {
       console.error('Failed to fetch snippets:', error);
@@ -23,53 +24,37 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
-  }, [setSnippets]);
+  }, [setSnippets, fetchData]);  
 
-  // Function to add a snippet
-  const handleAddSnippet = async (title: string, snippet: string) => {
+  const handleAddSnippet = async (title: string, snippet: string, userId: string) => {
     try {
-      const response = await addSnippet(title, snippet);
+      const response = await addSnippet(title, snippet, userId);
       if (response) {
-        fetchData();
-        setSnippets([response, ...snippets]);
-        
+        setSnippets((prevSnippets) => [...response, ...prevSnippets]);
       } else {
         return null;
       }
     } catch (error) {
       console.error("Failed to add snippet:", error);
-    }
+    };
   };
+    
 
-  // Function to delete a snippet
   const handleDeleteSnippet = async (id: number) => {
     try {
       await deleteSnippet(id);
-      // Remove the snippet from the local state
       setSnippets(snippets.filter(snippet => snippet.id !== id));
     } catch (error) {
       console.error("Failed to delete snippet:", error);
     }
   };
-
+  
   return (
     <div className="w-full min-h-screen font-bold font-sansSerif bg-black overflow-x-hidden flex-col flex items-center gap-16">
       {/* Header */}
       <nav className="w-11/12 border-white border-b py-6 flex items-center justify-between">
         <div className="tracking-wide text-xl font-semibold">SnippetHive</div>
         <div className="flex items-center gap-3">
-          <span className="font-bold">
-            <a
-              href="https://github.com/codewithmide/neon-snippetManager"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-1"
-            >
-              <span>Leave a</span>{" "}
-              <IoStar className="w-5 h-5 text-yellow-400"/>
-              <span>on GitHub</span>
-            </a>
-          </span>
           <UserButton afterSignOutUrl="/" />
         </div>
       </nav>
